@@ -2,6 +2,7 @@ package com.gluck.food_order.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.gluck.food_order.model.User;
@@ -13,8 +14,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // @Autowired
-    // private PasswordEncoder passwordEncoder; TODO add this Bean on config
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Save user to database
     public User saveUser(User user) {
@@ -81,7 +82,7 @@ public class UserService {
         try {
             User existingUser = userRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
-            // existingUser.setPassword(passwordEncoder.encode(password));
+            existingUser.setPassword(passwordEncoder.encode(password));
         } catch (Exception e) {
             throw new RuntimeException("Failed to update password", e);
         }
