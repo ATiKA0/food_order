@@ -9,4 +9,6 @@ import com.gluck.food_order.model.Ingredient;
 public interface IngredientRepository extends JpaRepository<Ingredient, Integer> {
 
     Optional<Ingredient> findByName(String name);
+
+    Optional<Ingredient> findById(Integer id);
 }

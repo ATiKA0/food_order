@@ -11,4 +11,6 @@ import com.gluck.food_order.model.Food;
 public interface FoodRepository extends JpaRepository<Food, Integer> {
 
     Optional<Food> findByName(String name);
+
+    Optional<Food> findById(Integer id);
 }
