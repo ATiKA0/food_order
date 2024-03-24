@@ -33,7 +33,6 @@ public class IngredientRepositoryTest {
         food.setName("test1");
         Food food2 = new Food();
         food2.setName("test2");
-        testIngredient.setFood(List.of(food, food2));
 
         // Act
         Ingredient savedIngredient = ingredientRepository.save(testIngredient);
@@ -42,7 +41,6 @@ public class IngredientRepositoryTest {
         Assertions.assertNotNull(savedIngredient);
         Assertions.assertTrue(savedIngredient.getId() > 0);
         Assertions.assertEquals("TEST", savedIngredient.getName());
-        Assertions.assertEquals(testIngredient.getFood(), savedIngredient.getFood());
     }
 
     @Test
@@ -55,10 +53,8 @@ public class IngredientRepositoryTest {
         testFood2.setName("TEST2");
         Ingredient ingredient = new Ingredient();
         ingredient.setName("test1");
-        ingredient.setFood(List.of(testFood, testFood2));
         Ingredient ingredient2 = new Ingredient();
         ingredient2.setName("test2");
-        ingredient2.setFood(List.of(testFood, testFood2));
 
         ingredientRepository.save(ingredient);
         ingredientRepository.save(ingredient2);
