@@ -2,9 +2,12 @@ package com.gluck.food_order.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.gluck.food_order.dto.UserPasswordChangeDTO;
 import com.gluck.food_order.model.User;
 import com.gluck.food_order.repository.UserRepository;
 
@@ -61,7 +64,7 @@ public class UserService {
         }
     }
 
-    // Update user methods
+    // Update user method
     public User updateUser(User user) {
         try {
             User existingUser = userRepository.findById(user.getId())
@@ -78,13 +81,25 @@ public class UserService {
         }
     }
 
+    // User password change methods
     public void updatePassword(String password, Integer id) {
         try {
             User existingUser = userRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
             existingUser.setPassword(passwordEncoder.encode(password));
+            userRepository.save(existingUser);
         } catch (Exception e) {
             throw new RuntimeException("Failed to update password", e);
+        }
+    }
+
+    public ResponseEntity<?> changeUserPassword(UserPasswordChangeDTO userPasswordChangeDTO) {
+        try {
+            System.out.println(userPasswordChangeDTO.getNewPassword() + userPasswordChangeDTO.getUserId());
+            updatePassword(userPasswordChangeDTO.getNewPassword(), userPasswordChangeDTO.getUserId());
+            return ResponseEntity.status(HttpStatus.OK).body("Password changed successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during password chenge");
         }
     }
 }

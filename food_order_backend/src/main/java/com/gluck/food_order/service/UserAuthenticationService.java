@@ -53,7 +53,7 @@ public class UserAuthenticationService {
             UserRegistrationResponseDTO userRegistrationResponseDTO = new UserRegistrationResponseDTO(firstName,
                     lastName,
                     email);
-            return ResponseEntity.status(HttpStatus.OK).body(userRegistrationResponseDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userRegistrationResponseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error during user registration");
