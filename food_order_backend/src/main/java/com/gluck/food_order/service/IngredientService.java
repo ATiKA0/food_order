@@ -15,7 +15,7 @@ public class IngredientService {
     private IngredientRepository ingredientRepository;
 
     // save food to database
-    public Ingredient saveFood(Ingredient ingredient) {
+    public Ingredient saveIngredient(Ingredient ingredient) {
         try {
             return ingredientRepository.save(ingredient);
         } catch (Exception e) {
