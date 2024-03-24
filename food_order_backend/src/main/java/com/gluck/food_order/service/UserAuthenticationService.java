@@ -1,6 +1,7 @@
 package com.gluck.food_order.service;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,19 +56,30 @@ public class UserAuthenticationService {
             return ResponseEntity.status(HttpStatus.OK).body(userRegistrationResponseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new UserRegistrationResponseDTO("", "", ""));
+                    .body("Error during user registration");
         }
     }
 
-    public UserLoginResponseDTO loginUser(String email, String password) {
+    public ResponseEntity<?> loginUser(String email, String password) {
         try {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(email, password));
             String token = tokenService.generateJwt(authentication, userRepository.getUserByEmail(email).get().getId());
 
-            return new UserLoginResponseDTO(userRepository.getUserByEmail(email).get().getEmail(), token);
+            UserLoginResponseDTO userLoginResponseDTO = new UserLoginResponseDTO(
+                    userRepository.getUserByEmail(email).get().getEmail(), token);
+
+            if (userLoginResponseDTO.getEmail() == null || Objects.equals(userLoginResponseDTO.getJwt(), "")) {
+
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad credentials");
+
+            } else {
+
+                return ResponseEntity.status(HttpStatus.OK).body(userLoginResponseDTO);
+
+            }
         } catch (Exception e) {
-            return new UserLoginResponseDTO(null, "");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during user login");
         }
     }
 
