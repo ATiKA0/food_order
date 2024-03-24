@@ -78,6 +78,7 @@ public class FoodService {
             Food existingFood = foodRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Food with ID: " + id + " not found"));
             existingFood.setIngredients(ingredients);
+            foodRepository.save(existingFood);
         } catch (Exception e) {
             throw new RuntimeException("Failed to update ingredients", e);
         }
