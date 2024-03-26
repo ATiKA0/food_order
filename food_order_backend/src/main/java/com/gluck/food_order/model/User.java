@@ -17,6 +17,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,9 @@ public class User implements UserDetails {
     private String lastName;
     @Column(unique = true)
     private String email;
+    private Integer phoneNumber;
+    @OneToMany(mappedBy = "user")
+    private List<Address> address;
     @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
