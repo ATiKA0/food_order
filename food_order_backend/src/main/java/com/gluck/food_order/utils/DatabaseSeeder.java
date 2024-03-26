@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.gluck.food_order.model.Address;
+import com.gluck.food_order.model.Category;
 import com.gluck.food_order.model.Food;
 import com.gluck.food_order.model.Ingredient;
+import com.gluck.food_order.model.Order;
+import com.gluck.food_order.model.PaymentMethod;
 import com.gluck.food_order.model.Role;
 import com.gluck.food_order.model.User;
 import com.gluck.food_order.repository.FoodRepository;
 import com.gluck.food_order.repository.IngredientRepository;
+import com.gluck.food_order.repository.OrderRepository;
 import com.gluck.food_order.repository.UserRepository;
 
 @Component
@@ -22,13 +27,16 @@ public class DatabaseSeeder implements CommandLineRunner {
     private FoodRepository foodRepository;
     private IngredientRepository ingredientRepository;
     private PasswordEncoder passwordEncoder;
+    private OrderRepository orderRepository;
 
     public DatabaseSeeder(UserRepository userRepository, FoodRepository foodRepository,
-            IngredientRepository ingredientRepository, PasswordEncoder passwordEncoder) {
+            IngredientRepository ingredientRepository, PasswordEncoder passwordEncoder,
+            OrderRepository orderRepository) {
         this.foodRepository = foodRepository;
         this.ingredientRepository = ingredientRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -37,6 +45,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         createAdmin();
         addIngredients();
         addFoods();
+        addOrder();
     }
 
     private void createAdmin() {
@@ -58,6 +67,8 @@ public class DatabaseSeeder implements CommandLineRunner {
         user.setFirstName("UserF");
         user.setLastName("UserL");
         user.setEmail("user@email.com");
+        user.setPhoneNumber("36205894711");
+        user.setAddress(List.of(new Address(null, user, 0000, "test", "test", "test", true)));
         user.setPassword(passwordEncoder.encode("pass"));
         user.setRole(Role.USER);
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -85,12 +96,28 @@ public class DatabaseSeeder implements CommandLineRunner {
         Food food1 = new Food();
         food1.setName("testFood1");
         food1.setIngredients(List.of(ingredient1, ingredient2));
+        food1.setCategory(Category.PIZZA);
+        food1.setPrice(2000);
+        food1.setIsActive(true);
         foodRepository.save(food1);
         Food food2 = new Food();
         food2.setName("testFood2");
         food2.setIngredients(List.of(ingredient3));
+        food2.setCategory(Category.HAMBURGER);
+        food2.setPrice(3000);
+        food2.setIsActive(true);
         foodRepository.save(food2);
 
+    }
+
+    private void addOrder() {
+        Order order = new Order();
+        order.setUser(userRepository.getUserById(1).get());
+        order.setFood(List.of(foodRepository.findById(1).get()));
+        order.setTotal(2000);
+        order.setPaymentMethod(PaymentMethod.CASH);
+        order.setNote("test");
+        orderRepository.save(order);
     }
 
 }
