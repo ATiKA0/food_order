@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -51,7 +52,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     private Timestamp createdAt;
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 

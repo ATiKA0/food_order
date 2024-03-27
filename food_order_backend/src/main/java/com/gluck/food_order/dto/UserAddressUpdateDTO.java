@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class UserAddressDTO {
-
+public class UserAddressUpdateDTO {
     private Integer userId;
+    private Integer addressId;
     private Integer zipCode;
     private String country;
     private String county;
