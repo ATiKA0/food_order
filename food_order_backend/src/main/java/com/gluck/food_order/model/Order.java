@@ -2,6 +2,7 @@ package com.gluck.food_order.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,6 +33,7 @@ public class Order {
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "food_order", joinColumns = @JoinColumn(name = "food_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))

@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,12 +44,14 @@ public class User implements UserDetails {
     private String email;
     private String phoneNumber;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Address> address;
     @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
     private Timestamp createdAt;
+    @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
