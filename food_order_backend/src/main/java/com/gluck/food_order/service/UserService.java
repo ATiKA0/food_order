@@ -67,13 +67,15 @@ public class UserService {
     // Update user method
     public User updateUser(User user) {
         try {
-            User existingUser = userRepository.findById(user.getId())
+            User existingUser = userRepository.getUserById(user.getId())
                     .orElseThrow(() -> new IllegalArgumentException("User with ID: " + user.getId() + " not found"));
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
             existingUser.setPassword(user.getPassword());
             existingUser.setCreatedAt(user.getCreatedAt());
+            existingUser.setAddress(user.getAddress());
+            existingUser.setPhoneNumber(user.getPhoneNumber());
 
             return userRepository.save(existingUser);
         } catch (Exception e) {
@@ -84,7 +86,7 @@ public class UserService {
     // User password change methods
     public void updatePassword(String password, Integer id) {
         try {
-            User existingUser = userRepository.findById(id)
+            User existingUser = userRepository.getUserById(id)
                     .orElseThrow(() -> new IllegalArgumentException("User with ID: " + id + " not found"));
             existingUser.setPassword(passwordEncoder.encode(password));
             userRepository.save(existingUser);
