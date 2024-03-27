@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,7 +30,6 @@ public class AddressController {
     @PostMapping("/upload-address")
     public ResponseEntity<?> UploadAddress(@RequestBody UserAddressDTO address,
             BindingResult bindingResult) {
-
         try {
             if (bindingResult.hasErrors())
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid request");
@@ -47,7 +47,7 @@ public class AddressController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid request");
             return ResponseEntity.status(HttpStatus.OK).body(addressService.updateAddressByUserId(address));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during upload address");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during update address");
         }
     }
 
@@ -56,7 +56,16 @@ public class AddressController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(addressService.removeAddressById(userId, addressId));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during upload address");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during remove address");
+        }
+    }
+
+    @GetMapping("/get-address/{userId}")
+    public ResponseEntity<?> GetUserAddressListById(@PathVariable Integer userId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(addressService.getUserAddressByUserId(userId));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving address list");
         }
     }
 }

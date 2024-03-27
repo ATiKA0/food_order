@@ -69,7 +69,18 @@ public class AddressService {
             List<Address> existingAddressList = user.getAddress();
             return new UserAddressResponseDTO(existingAddressList);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to delete food", e);
+            throw new RuntimeException("Failed to delete address", e);
+        }
+    }
+
+    public UserAddressResponseDTO getUserAddressByUserId(Integer userId) {
+        try {
+            User user = userRepository.getUserById(userId)
+                    .orElseThrow(
+                            () -> new IllegalArgumentException("User with ID: " + userId + " not found"));
+            return new UserAddressResponseDTO(user.getAddress());
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving address", e);
         }
     }
 
